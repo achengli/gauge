@@ -3,15 +3,16 @@
 Gauge is a *Lua* library that aim to be the pure Lua port of demo and test functions
 from [GNU Octave](https://octave.org).
 
-This library could be used to eval and debug your lua software writing demos in comment
-blocks or your tests also.
+This library can be used to eval and debug your Lua software writing demonstrations 
+inside comment blocks on your source file. Also brings you the way to test your 
+sofware functionality.
 
-Every test and demo will be enumerated giving a visual way for research the location
-of your blocks.
+Each test and demo block will be enumerated giving a visual way for research the 
+location of your blocks inside the file.
 
 ## Example
 
-Demo and test functions should be used out from your target file which you will probe.
+Demo and test functions must be used out from your target file which you will probe.
 
 ```lua
 -- file: lo.lua
