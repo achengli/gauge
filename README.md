@@ -37,8 +37,15 @@ local demo = require'gauge'.demo
 demo('./lo.lua')
 ```
 
+> (!) demo: 1
+> 103
+
 And for the test block code
 ```lua
 local test = require'gauge'.test
 test('./lo.lua')
 ```
+> (!) test: 1
+>
+> * passed: 1
+> * failed: 1
