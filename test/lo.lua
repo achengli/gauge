@@ -1,3 +1,5 @@
+-- demonstration file
+
 local function lo(la0)
   if type(la0) == 'number' then
     return la0+1

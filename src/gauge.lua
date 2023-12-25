@@ -1,3 +1,8 @@
+-- gauge.lua
+-- Author: Yassin Achengli <achengli@github.com>
+-- Description: Port of demo and test functions from GNU Octave
+-- License: GPLv3 `See the LICENSE file`
+
 --- Eval all the demo doc comments in `file_name` source file. The comments must
 --- start with `--!demo` and each demo line must start with `--!`.
 --- --
@@ -71,8 +76,9 @@ end
 --- After each test was evaluated, will show the passed and failed tests.
 --- --
 --- @param file_name string
+--- @param silent? boolean # Default nil
 --- @return integer,integer
-local function test(file_name)
+local function test(file_name, silent)
   file_name = file_name .. (file_name:match('%.lua$') and '' or '.lua')
   local f = io.open(file_name, 'r')
   if not f then
@@ -93,8 +99,7 @@ local function test(file_name)
       if line:match('^--!test *\n') then
         count = count + 1
         print(string.format('(!) test %d:',count))
-        chunk = ''
-        st = 1
+        chunk = '' st = 1
       end
     elseif st == 1 then
       if line:match('^--! *') then
@@ -105,7 +110,7 @@ local function test(file_name)
       end
     elseif st == 2 then
       st = 0
-      local ok, _=pcall(function()
+      local ok, _ = pcall(function()
         local r = load(content .. '\n' .. chunk)
         if r then
           r()
@@ -113,11 +118,8 @@ local function test(file_name)
           print("test chunk could not be executed because is a " .. type(r))
         end
       end)
-      if ok then
-        passed = passed + 1
-      else
-        failed = failed + 1
-      end
+      passed = (ok and passed + 1 or passed)
+      failed = (ok and failed or (failed + 1))
 
       if line:match('--!test *\n') then
         count = count + 1
@@ -129,7 +131,7 @@ local function test(file_name)
   end
 
   if st == 1 then
-    local ok, _=pcall(function()
+    local ok, _ = pcall(function()
       local r = load(content .. '\n' .. chunk)
       if r then
         r()
@@ -137,14 +139,13 @@ local function test(file_name)
         print("test chunk could not be executed because is a " .. type(r))
       end
     end)
-    if ok then
-      passed = passed + 1
-    else
-      failed = failed + 1
-    end
+    passed = (ok and passed + 1 or passed)
+    failed = (ok and failed or (failed + 1))
   end
-  print(string.format('\n* passed: %d',passed))
-  print(string.format('* failed: %d',failed))
+  if not silent then
+    print(string.format('\n* passed: %d',passed))
+    print(string.format('* failed: %d',failed))
+  end
   return passed, failed
 end
 
