@@ -4,6 +4,7 @@ source = {
   url = 'git+https://github.com/achengli/gauge.git'
 }
 description = {
+  summary = 'Pure lua port of "demo" and "test" functions from GNU Octave',
   detailed = [[
   Pure lua port of "demo" and "test" functions from GNU Octave.
   ]],
