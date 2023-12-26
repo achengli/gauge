@@ -25,6 +25,8 @@ end
 
 --!test
 --! lo(102) -- 103
+
+--!test
 --! lo('string') -- error
 
 --!demo
