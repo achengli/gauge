@@ -1,6 +1,6 @@
 # Gauge.lua
 
-Gauge is a *Lua* library that aim to be the pure Lua port of demo and test functions
+Gauge is a *Lua* library that aims to be the pure Lua port of demo and test functions
 from [GNU Octave](https://octave.org).
 
 This library can be used to eval and debug your Lua software writing demonstrations 
