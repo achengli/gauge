@@ -40,6 +40,7 @@ demo('./lo.lua')
 ```
 
 > (!) demo: 1
+>
 > 103
 
 And for the test block code
@@ -51,3 +52,17 @@ test('./lo.lua')
 >
 > * passed: 1
 > * failed: 1
+
+## Future projections
+
+Gauge has some ways to enhance the behavior to ensure better manageability of the developer and
+to give a better presentation of the results.
+
+- [ ] Set a general doc interpreter for new custom builds from the developer who uses this library.
+- [ ] Include some colors for the output.
+- [ ] Posibility to select which point on the file will be the beginning.
+- [ ] Parallelize the source.
+
+## Contributors
+
+Feel free to give new ideas, modifications and critics, I will apreciate them very much!

@@ -3,8 +3,6 @@
 -- Description: Port of demo and test functions from GNU Octave
 -- License: GPLv3 `See the LICENSE file`
 
-local func = require'functional'
-
 --- Macro from common lisp. Lets you interact with `file_name` without worrying about 
 --- the descriptor.
 --- 
@@ -74,19 +72,26 @@ local function __gauge_executor(file_name, prefix, silent, results)
   file_name = __file_exist(file_name) and file_name or (file_name .. '/init.lua')
 
   local _code_section_to_execute = ''
+  local _to_probe_code_segment = ''
   local _total_test_passed = 0
   local _total_test_failed = 0
   local _mealy_state = 0
+  local _count = 0
 
-  local _file_raw_text = __with_open_file (file_name, func.lambda [[(f,r) f:read('a')]])
-
+  print(f("\n~ %s of %s file\n---", prefix, file_name))
   __with_open_file(file_name, function(fd,_)
-    for count, line in ipairs(_file_lines(fd)) do
+    for _, line in ipairs(_file_lines(fd)) do
+
+      if (not line:match('^--')) then
+        _to_probe_code_segment = _to_probe_code_segment .. line
+      end
+
       if _mealy_state == 0 then
         if line:match(f('^--!%s *\n', prefix)) then
-          print(f('(!) %s %d:',prefix, count))
+          print(f('\n(!) %s %d',prefix, _count))
           _code_section_to_execute = ''
           _mealy_state = 1
+          _count = _count + 1
         end
       elseif _mealy_state == 1 then
         if line:match('^--! *') then
@@ -98,16 +103,16 @@ local function __gauge_executor(file_name, prefix, silent, results)
       elseif _mealy_state == 2 then
         _mealy_state = 0
         local ok, _ = pcall(function()
-          local r = load(f("%s%s%s", _file_raw_text, '\n', _code_section_to_execute))
+          local r = load(f("%s%s%s", _to_probe_code_segment, '\n', _code_section_to_execute))
           if r then r()
-          else print(f("%s error at pcall", prefix) .. type(r))
+          else print(f("%s error at pcall", prefix))
           end
         end)
         _total_test_passed = (ok and _total_test_passed + 1 or _total_test_passed)
         _total_test_failed = (ok and _total_test_failed or _total_test_failed + 1)
 
-        if line:match('--!test *\n') then
-          print(string.format('(!) test %d:',count))
+        if line:match(f('--!%s *\n', prefix)) then
+          print(f('(!) %s %d', prefix, _count))
           _code_section_to_execute = ''
           _mealy_state = 1
         end
@@ -117,9 +122,9 @@ local function __gauge_executor(file_name, prefix, silent, results)
 
   if _mealy_state == 1 then
     local ok,_ = pcall(function()
-      local r = load(_file_raw_text .. '\n' .. _code_section_to_execute)
+      local r = load(_to_probe_code_segment .. '\n' .. _code_section_to_execute)
       if r then r()
-      else print("test chunk could not be executed because is a " .. type(r))
+      else print(f("%s error at pcall", prefix))
       end
     end)
     _total_test_passed = (ok and _total_test_passed + 1 or _total_test_passed)
@@ -140,10 +145,16 @@ end
 --- start with *"--!demo"* and each demo line must start with *"--!"*.
 --- --
 --- @param file_name string
---- @param silent? boolean # Default nil
+--- @param silent? boolean # Default true
 local function demo(file_name, silent)
+  if silent == nil then silent = true end
   __gauge_executor(file_name, 'demo', silent, false)
 end
+--!demo
+--! package.path = package.path .. ';../test/?.lua'
+--! print'Demonstration of demo function'
+--! local gauge = require'gauge'
+--! gauge.demo('../test/lo.lua')
 
 --- Eval all the test comments in `file_name` source file. The comments must
 --- start with *"--!test"* and each test line must start with *"--!"*
@@ -155,6 +166,11 @@ end
 local function test(file_name, silent)
   return __gauge_executor(file_name, 'test', silent, true)
 end
+--!test
+--! package.path = package.path .. ';../test/?.lua'
+--! print("Demonstration of test function")
+--! local gauge = require'gauge'
+--! gauge.test('../test/lo.lua')
 
 return {
   VERSION = '1.0.1-2',
