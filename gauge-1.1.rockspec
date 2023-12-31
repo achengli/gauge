@@ -1,21 +1,30 @@
 package = 'gauge'
-version = '1.0.1-1'
+version = '1.1'
+
 source = {
-  url = 'git+https://github.com/achengli/gauge.git'
+  url = 'git+https://github.com/achengli/gauge',
+  tag = '1.1',
 }
+
 description = {
   summary = 'Pure lua port of "demo" and "test" functions from GNU Octave',
   detailed = [[
-  Pure lua port of "demo" and "test" functions from GNU Octave.
+  Gauge is a Lua library that aims to be the pure Lua port of demo and test 
+  functions from GNU Octave. 
   ]],
   homepage = 'https://github.com/achengli/gauge',
   license = 'GPLv3',
 }
+
 dependencies = {
 }
+
 build = {
   type = 'builtin',
   modules = {
     gauge = 'src/gauge.lua',
+  },
+  copy_directories = {
+    'test',
   }
 }
