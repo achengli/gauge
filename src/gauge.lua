@@ -64,6 +64,12 @@ end
 --- After finding a block, it will mark in the console which one is executed in ascending
 --- order and then depending of the passed parameters will show the output or not, or will 
 --- return which one fails and wich succeed (`results` and `silent` parameters).
+--- 
+--- @param file_name string
+--- @param prefix string
+--- @param silent boolean
+--- @param results boolean
+--- @return nil | integer, integer
 local function __gauge_executor(file_name, prefix, silent, results)
 
   file_name = file_name .. (file_name:match('%.lua$') and '' or '.lua')
@@ -173,11 +179,12 @@ end
 --! gauge.test('../test/lo.lua')
 
 return {
-  VERSION = '1.0.1-2',
+  VERSION = '1.1',
   AUTHOR = 'Yassin Achengli <achengli@github.com>',
   DESCRIPTION = [[
-  Gauge is a Lua library that aims to be the pure Lua port of demo and test functions from 
-  GNU Octave.]],
+  Gauge is a Lua library that aims to be the pure Lua port 
+  of demo and test functions from GNU Octave.
+  ]],
   NAME = 'Gauge',
   ID = '568658dc-e27c-47f7-8893-7f00a9791705',
   test = test,
