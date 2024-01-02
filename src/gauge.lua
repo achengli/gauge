@@ -39,7 +39,7 @@ local f = string.format
 --- @param from? integer # From which line will start reading
 --- @param count? integer # How many lines will read.
 --- @return table
-local _file_lines = function (fd, from,count)
+local __file_lines = function (fd, from,count)
   if (not count and from) then count = from; from = 0 end
   local lines = {}
   local counter = 0
@@ -69,7 +69,7 @@ end
 --- @param prefix string
 --- @param silent boolean
 --- @param results boolean
---- @return nil | integer, integer
+--- @return integer, integer | nil
 local function __gauge_executor(file_name, prefix, silent, results)
 
   file_name = file_name .. (file_name:match('%.lua$') and '' or '.lua')
@@ -86,7 +86,7 @@ local function __gauge_executor(file_name, prefix, silent, results)
 
   print(f("\n~ %s of %s file\n---", prefix, file_name))
   __with_open_file(file_name, function(fd,_)
-    for _, line in ipairs(_file_lines(fd)) do
+    for _, line in ipairs(__file_lines(fd)) do
 
       if (not line:match('^--')) then
         _to_probe_code_segment = _to_probe_code_segment .. line
@@ -149,9 +149,10 @@ end
 
 --- Eval all the demo doc comments in `file_name` source file. The comments must
 --- start with *"--!demo"* and each demo line must start with *"--!"*.
---- --
+---
 --- @param file_name string
 --- @param silent? boolean # Default true
+--- @return nil
 local function demo(file_name, silent)
   if silent == nil then silent = true end
   __gauge_executor(file_name, 'demo', silent, false)
@@ -165,11 +166,12 @@ end
 --- Eval all the test comments in `file_name` source file. The comments must
 --- start with *"--!test"* and each test line must start with *"--!"*
 --- After each test was evaluated, will show the passed and failed tests.
---- -- 
+---
 --- @param file_name string
 --- @param silent? boolean # Default nil
---- @return integer,integer
+--- @return nil|integer,integer
 local function test(file_name, silent)
+  silent = (silent == nil) and false or true
   return __gauge_executor(file_name, 'test', silent, true)
 end
 --!test
