@@ -18,7 +18,7 @@ local __with_open_file = function(file_name, fc)
   return r
 end
 
---- Check if a file exists in the path passed in `file_name`.
+--- Check if the file mentioned by the `file_name` path exist.
 --- 
 --- @param file_name string
 --- @return boolean
@@ -27,13 +27,14 @@ local __file_exist = function (file_name)
   if f then f:close() return true else return false end
 end
 
--- Alias to shorten the `string.format` function.
+--- Alias to shorten the `string.format` function.
 local f = string.format
 
---- Get all the lines from a file descriptor `fd` and return them into a table list.
+--- Get lines from the file descriptor (`fd`) and group them into a table list.
 ---
---- If count is `nil` then it will read from lines. If from is `nil` then will read
---- the full file from the file pointer to the end of file.
+--- If count is `nil` then it will read `from` lines. If `from` is `nil` then it 
+--- will read the full file starting from the file descriptor pointer until the 
+--- end of the file.
 --- 
 --- @param fd file*
 --- @param from? integer # From which line will start reading
@@ -53,13 +54,13 @@ local __file_lines = function (fd, from,count)
 end
 
 --- Generic function that builds *demo* and *test* exported functions. This function
---- recovers those source code sections which begins with *--!*`prefix` like the following
+--- recovers the source code sections which begins with *--!*`prefix` like the following
 --- example.
 --- 
---- @example
+--- ## Usage
 --- --!prefix
 --- --! print("Source code that will be executed by blocks")
---- @end example
+--- __gauge_executor('./mydemofile.lua', 'prefix', false, true)
 --- 
 --- After finding a block, it will mark in the console which one is executed in ascending
 --- order and then depending of the passed parameters will show the output or not, or will 
@@ -67,8 +68,8 @@ end
 --- 
 --- @param file_name string
 --- @param prefix string
---- @param silent boolean
---- @param results boolean
+--- @param silent? boolean
+--- @param results? boolean
 --- @return integer, integer | nil
 local function __gauge_executor(file_name, prefix, silent, results)
 
@@ -191,4 +192,5 @@ return {
   ID = '568658dc-e27c-47f7-8893-7f00a9791705',
   test = test,
   demo = demo,
+  gauge_gen = __gauge_executor,
 }
