@@ -47,8 +47,8 @@ local demo = require'gauge'.demo
 demo('./lo.lua')
 ```
 
-> (!) demo: 1
->
+> Demo
+> ~~~
 > 103
 
 For your testing comment-blocks you can do:
@@ -58,10 +58,10 @@ local test = require'gauge'.test
 test('./lo.lua')
 ```
 
-> (!) test: 1
->
-> * passed: 1
-> * failed: 1
+> Test
+> ~~~
+> Test passed: 1
+> Test failed: 1
 
 To avoid prompts from intepreted comment-blocks you can use the argument `silent` which is a ***boolean*** type variable.
 
@@ -77,6 +77,4 @@ Gauge has some ways to enhance the behavior to ensure better manageability of th
 
 ## Contributors
 
-Feel free to give new ideas, modifications and critics; I will apreciate them very much!
-
-### Enjoy!
+If you have solid purpouses, are welcome :)
