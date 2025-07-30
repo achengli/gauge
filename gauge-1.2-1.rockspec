@@ -1,5 +1,5 @@
 package = "gauge"
-version = "1.2"
+version = "1.2-1"
 
 source = {
    url = "git+https://github.com/achengli/gauge",
