@@ -1,10 +1,10 @@
 -- gauge.lua
 -- ---
 -- Copyright (C) BY-NC 2023-2025 Yassin Achengli 
--- This source file follows the GPLv3 license terms.
+-- This work follows the GPLv3 license terms.
 
 --- Macro inspired from Common Lisp. Easy file access. 
---- @param file_name string
+--- @param file_path string
 --- @param map_function function # Functional callback
 --- @return any
 local with_file_lines = function(file_path, map_function)
@@ -55,10 +55,6 @@ end
 local executor = function(file_path, f_macro, f_source, header_name, ctx)
 
   local blocks = {{}}
-
-  local function has_comment(line)
-    return string.match(line, '^%-%-!') and true or false
-  end
 
   with_file_lines(file_path, function (line, last_line)
     -- Retrieve source lines in a table as code blocks.
@@ -118,7 +114,9 @@ local demo = function(file_path)
     end
 
     if trigger then
-      trigger()
+      if not pcall(trigger) then
+        print('Demo failed :(')
+      end
     end
   end, function(block)
     for _, line in ipairs(block) do
@@ -195,16 +193,14 @@ local test = function(file_path)
 end
 
 return {
-  VERSION = '1.1',
+  VERSION = '1.2',
   AUTHOR = 'Yassin Achengli <achengli@github.com>',
   DESCRIPTION = [[
   Gauge is a Lua library that aims to be the pure Lua port 
   of demo and test functions from GNU Octave.
   ]],
-  NAME = 'Gauge',
+  NAME = 'gauge',
   ID = '568658dc-e27c-47f7-8893-7f00a9791705',
-  executor = executor,
-  with_file_lines = with_file_lines,
   demo = demo,
   test = test,
 }

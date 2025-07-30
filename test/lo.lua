@@ -12,7 +12,7 @@ end
 --! print(lo(102)) -- 103
 
 --!test
---! print(lo('string')) -- error
+--! print(lo(23)) -- error
 
 --!demo
 --! function diff(f,x0)
